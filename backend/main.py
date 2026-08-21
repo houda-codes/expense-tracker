@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    aallow_origins=["*"],
+    allow_origins=["http://localhost:5173", "https://expense-tracker-houda4.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

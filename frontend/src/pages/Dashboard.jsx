@@ -78,54 +78,112 @@ function Dashboard() {
     navigate('/login')
   }
 
+  const total = expenses.reduce((sum, e) => sum + e.amount, 0)
+
   return (
-    <div>
-      <h2>Dashboard</h2>
-      <button onClick={handleLogout}>Logout</button>
+    <div className="min-h-screen bg-slate-50 px-4 py-8">
+      <div className="max-w-2xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-semibold text-slate-900">Expense Tracker</h1>
+            <p className="text-slate-500 text-sm">Total spent: ${total.toFixed(2)}</p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="text-sm font-medium text-slate-500 hover:text-slate-900 transition"
+          >
+            Logout
+          </button>
+        </div>
 
-      <h3>{editingId ? 'Edit Expense' : 'Add Expense'}</h3>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="number"
-          step="0.01"
-          placeholder="Amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-        />
-        <button type="submit">{editingId ? 'Update' : 'Add'}</button>
-        {editingId && <button type="button" onClick={resetForm}>Cancel</button>}
-      </form>
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
+          <h2 className="text-sm font-semibold text-slate-900 mb-4">
+            {editingId ? 'Edit expense' : 'Add expense'}
+          </h2>
+          <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-3">
+            <input
+              type="number"
+              step="0.01"
+              placeholder="Amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+              className="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
+            />
+            <input
+              type="text"
+              placeholder="Category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+              className="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
+            />
+            <input
+              type="text"
+              placeholder="Description (optional)"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="col-span-2 px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
+            />
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              required
+              className="col-span-2 px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
+            />
+            <div className="col-span-2 flex gap-2">
+              <button
+                type="submit"
+                className="flex-1 bg-slate-900 text-white text-sm font-medium py-2.5 rounded-lg hover:bg-slate-800 transition"
+              >
+                {editingId ? 'Update' : 'Add'}
+              </button>
+              {editingId && (
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="px-4 text-sm font-medium text-slate-500 hover:text-slate-900 transition"
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
 
-      <h3>Your Expenses</h3>
-      <ul>
-        {expenses.map((exp) => (
-          <li key={exp.id}>
-            {exp.date} — {exp.category} — ${exp.amount} — {exp.description}
-            <button onClick={() => handleEdit(exp)}>Edit</button>
-            <button onClick={() => handleDelete(exp.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 divide-y divide-slate-100">
+          {expenses.length === 0 && (
+            <p className="text-sm text-slate-400 text-center py-8">No expenses yet.</p>
+          )}
+          {expenses.map((exp) => (
+            <div key={exp.id} className="flex items-center justify-between px-6 py-4">
+              <div>
+                <p className="text-sm font-medium text-slate-900">
+                  {exp.category} · ${exp.amount.toFixed(2)}
+                </p>
+                <p className="text-xs text-slate-500">
+                  {exp.date} {exp.description && `· ${exp.description}`}
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleEdit(exp)}
+                  className="text-xs font-medium text-slate-500 hover:text-slate-900 transition"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(exp.id)}
+                  className="text-xs font-medium text-red-500 hover:text-red-700 transition"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
