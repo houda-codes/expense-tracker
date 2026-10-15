@@ -2,13 +2,14 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 
-from database import get_db
+from database import get_db, engine, Base
 import models
 import schemas
 import auth
 
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
-from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
